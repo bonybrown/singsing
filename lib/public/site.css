@@ -1,0 +1,46 @@
+/* Generic pane rules */
+body { margin: 0}
+* { font-family:arial,sans-serif } 
+.row, .col { overflow: hidden; position: absolute; }
+.row { left: 0; right: 0; }
+.col { top: 0; bottom: 0; }
+.scroll-x { overflow-x: auto; }
+.scroll-y { overflow-y: auto; }
+.header.row { height: 50px; top: 0; }
+.body.row { top: 50px; bottom: 50px; }
+.footer.row { height: 50px; bottom: 0; }
+div.body div{padding-left:1ex;padding-top:1ex;padding-bottom:1ex;border-top:1px solid #f0f0f0;border-bottom:1px solid #909090;background-color:#e3e3df};
+a{border:1px solid red}
+div.body div.selected{background-color:#a090f6}
+div.header form{margin-right:100px}
+div.footer form{margin-right:50px}
+input.textinput {font-size:32px;height:100%}
+.footer.row {font-size:32px}
+span.actions{display:inline;float:right;margin-top: -0.5ex;
+margin-right: 1ex;}
+#q{width:100%}
+#reqname{width:100%}
+button.play{background-image: url('media-playback-start.png');}
+button.random{background-image: url('media-playlist-shuffle.png');}
+button.search{background-image: url('find.png');}
+button:disabled{opacity:0.2}
+button{
+	width: 48px;
+	height: 48px;
+padding: 0;
+margin: 0;
+border: 0px none;
+background-color: transparent; 
+	text-indent: 200px;
+}
+div.header button{float:right}
+div.footer button{float:right}
+
+div.body div.nomatch {
+	background-color: #e3e3df;
+	background-image: url("not-found.png");
+	background-repeat: no-repeat;
+	text-align: center;
+	padding: 180px 1ex 1ex 1ex;
+	background-position-x: center;
+}

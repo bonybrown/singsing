@@ -1,0 +1,133 @@
+<html>
+    <head>
+        <title>Karaoke</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link href="site.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+        var current_selection = null;
+        
+        function set_selection(selected){
+                current_selection = selected;
+                var a = $("#playbtn");
+                if( a.length > 0 ){
+                        a[0].disabled = (selected == null);
+                }
+                
+        }
+
+        
+        function search_result(d,s,j){
+                document.getElementById("result").innerHTML=d;
+        }
+        
+        function select(){
+                var t= $(event.target);
+                while( ! t.is("div")){
+                        t= t.parent();
+                }
+                if(t.hasClass("nomatch")){
+                        return;
+                }
+                var d = $("div.selected");
+                if( d.length != 0 ){
+                        //var a = $("div.selected span.actions");
+                        d.toggleClass("selected");
+                        //a.fadeOut({queue:true,duration:400});
+                }
+                if( t.id!="result"){
+                        t.toggleClass("selected");
+                }
+                
+                if( t[0].id != "result"){
+                        set_selection(t[0]);
+                }
+        }
+
+        
+        function search(){
+                set_selection(null);
+                var q=document.getElementById("q").value;
+                if( q){
+                        $.ajax({
+                        dataType: "html",
+                        url: "/search",
+                        data: {q:q},
+                        success: search_result
+                        });
+                }
+                return false;
+        }
+
+        function random(){
+                set_selection(null);
+                $.ajax({
+                        dataType: "html",
+                        url: "/random",
+                        success: search_result
+                        });
+                
+                return false;
+        }
+
+        function queue_result(d,s,j){
+                if(d.result){
+                        var ord = "th";
+                        var mod = d.position % 10;
+                        if( mod == 1 && d.position != 11 ){
+                                ord = "st";
+                        }
+                        if( mod == 2 && d.position != 12 ){
+                                ord = "nd";
+                        }
+                        if( mod == 3 && d.position != 13 ){
+                                ord = "rd";
+                        }
+                        alert("Your song is " + d.position + ord + " in the queue.");
+                }
+        }
+        
+        function queue(){
+                if( current_selection ){
+                        
+                        var name=$("#reqname")[0].value.trim();
+                        if(!name){
+                                alert("Don't be shy, put your name in to request a song!");
+                        }
+                        else{
+                                var id = current_selection.id.substr(3);
+                                $.ajax({
+                                dataType: "json",
+                                url: "/queue",
+                                data: {id:id,name:name},
+                                success: queue_result
+                                });
+                        }
+                }
+                else{
+                        alert("Search for a song or roll the dice, then pick a song first");
+                        
+                }
+                return false;
+        }
+        
+        </script>
+            
+        <div class="header row">
+            <button class="random" onclick="random()">random</button>
+            <button class="search" onclick="search()">search</button>
+            <form action="" onsubmit="return search();">
+                <input class="textinput" type="search" name="q" id="q" placeholder="Search Song or Artist" />
+            </form>
+        </div>
+        <div class="body row scroll-y" id="result" onclick="select()"></div>
+        <div class="footer row"><button disabled="disabled" id="playbtn" class="play" onclick="queue()">queue</button>
+            <form action="" onsubmit="return queue();">
+                <input class="textinput" type="text" id="reqname" placeholder="Your Name"></input>
+            </form>
+        </div>
+    </body>
+</html>
