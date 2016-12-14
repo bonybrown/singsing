@@ -7,7 +7,8 @@ body { margin: 0}
 .scroll-x { overflow-x: auto; }
 .scroll-y { overflow-y: auto; }
 .header.row { height: 50px; top: 0; }
-.body.row { top: 50px; bottom: 50px; }
+div.body-with-header{top: 50px;bottom: 50px;}
+
 .footer.row { height: 50px; bottom: 0; }
 div.body div{padding-left:1ex;padding-top:1ex;padding-bottom:1ex;border-top:1px solid #f0f0f0;border-bottom:1px solid #909090;background-color:#e3e3df};
 a{border:1px solid red}

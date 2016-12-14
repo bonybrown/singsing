@@ -11,6 +11,14 @@ class SongQueue < Sequel::Model(:queue)
     SongQueue.count
   end
   
+  def self.items
+    SongQueue.db[%q{SELECT s.id, a.name AS artist_name, s.name AS song_name
+                 FROM songs s , artists a, queue q
+                WHERE s.artist_id = a.id
+                AND q.song_id = s.id 
+                ORDER BY inserted;}]
+  end
+  
   def self.dequeue
     queue_item = SongQueue.order(:inserted).first
     song = nil

@@ -1,0 +1,20 @@
+<html>
+    <head>
+        <title>Karaoke Queue</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link href="site.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    </head>
+    <body>
+        <div class="body row scroll-y" id="result" onclick="select()">
+        <% queue_items.each do | row | %>
+            <div id="id_<%= row[:id] %>"><%= row[:artist_name]  %>
+            <br/>
+            <%= row[:song_name]  %>
+            </div>
+            
+        <% end %>        
+        </div>
+    </body>
+</html>

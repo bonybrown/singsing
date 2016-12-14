@@ -12,7 +12,11 @@ class WebInterface < Sinatra::Base
   end
   
   get '/random' do
-      puts "get random"
+    erb :results, :locals => {:search_results => Song.random}
+  end
+
+  get '/queue' do
+    erb :queue, :locals => {:queue_items => SongQueue.items}
   end
   
   post '/queue' do

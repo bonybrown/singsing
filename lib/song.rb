@@ -10,6 +10,10 @@ class Song < Sequel::Model
     File.join( Config.song_base_path, self.filename )
   end
   
+  def is_zip_file?
+    self.filename.match( /\.ZIP$/i )
+  end
+  
   def self.query( search_term )
     Song.db[%q{SELECT s.id, a.name AS artist_name, s.name AS song_name,
                   ts_rank_cd(english, plainto_tsquery('english',:query)) + ts_rank_cd(simple, plainto_tsquery('simple',:query)) AS rank
@@ -23,6 +27,9 @@ class Song < Sequel::Model
   end
   
   def self.random
-    Song.sample(10)
-  end
+    Song.db[%q{SELECT s.id, a.name AS artist_name, s.name AS song_name
+            FROM songs s TABLESAMPLE BERNOULLI( 20.0 / (SELECT COUNT(*) FROM SONGS) * 100 ) , artists a
+           WHERE s.artist_id = a.id;}]
+    end
+
 end
