@@ -101,6 +101,7 @@
                                 var id = current_selection.id.substr(3);
                                 $.ajax({
                                 dataType: "json",
+                                method: "post",
                                 url: "/queue",
                                 data: {id:id,name:name},
                                 success: queue_result
