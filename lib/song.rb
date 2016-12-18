@@ -22,7 +22,7 @@ class Song < Sequel::Model
                  OR simple @@ plainto_tsquery('simple',:query ))
                  AND s.artist_id = a.id
                  AND i.song_id  = s.id
-                 ORDER BY rank DESC;},
+                 ORDER BY rank DESC, a.name, s.name;},
                   query: search_term]
   end
   

@@ -12,7 +12,7 @@ class SongQueue < Sequel::Model(:queue)
   end
   
   def self.items
-    SongQueue.db[%q{SELECT s.id, a.name AS artist_name, s.name AS song_name
+    SongQueue.db[%q{SELECT s.id, a.name AS artist_name, s.name AS song_name, q.inserted_by as requested_by
                  FROM songs s , artists a, queue q
                 WHERE s.artist_id = a.id
                 AND q.song_id = s.id 

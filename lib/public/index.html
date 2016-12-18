@@ -32,6 +32,9 @@
                 if(t.hasClass("nomatch")){
                         return;
                 }
+                if(t[0].id == null || t[0].id == ""){
+                  return;
+                }
                 var d = $("div.selected");
                 if( d.length != 0 ){
                         //var a = $("div.selected span.actions");
@@ -46,6 +49,15 @@
                         set_selection(t[0]);
                 }
         }
+        
+        function show_queue(){
+          $.ajax({
+          dataType: "html",
+          url: "/queue",
+          success: search_result
+          });
+        }
+        
 
         
         function search(){
@@ -118,6 +130,7 @@
         </script>
             
         <div class="header row">
+            <button class="whats_queued" onclick="show_queue()">queued</button>
             <button class="random" onclick="random()">random</button>
             <button class="search" onclick="search()">search</button>
             <form action="" onsubmit="return search();">
