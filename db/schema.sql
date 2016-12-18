@@ -110,8 +110,6 @@ CREATE TABLE songs (
     id integer NOT NULL,
     artist_id integer NOT NULL,
     name character varying(80) NOT NULL,
-    dir character varying(20) NOT NULL,
-    file character varying(45) NOT NULL,
     filename character varying(255) DEFAULT NULL::character varying,
     sortkey character varying(80) DEFAULT NULL::character varying
 );
