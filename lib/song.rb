@@ -30,6 +30,10 @@ class Song < Sequel::Model
     Song.db[%q{SELECT s.id, a.name AS artist_name, s.name AS song_name
             FROM songs s TABLESAMPLE BERNOULLI( 20.0 / (SELECT COUNT(*) FROM SONGS) * 100 ) , artists a
            WHERE s.artist_id = a.id;}]
-    end
+  end
 
+end
+
+class QueuedSong < Song
+  attr_accessor :requested_by
 end

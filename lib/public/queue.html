@@ -1,0 +1,27 @@
+<html>
+    <head>
+        <title>Karaoke Queue</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <link href="site.css" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
+    </head>
+    <body>
+        <div class="body row scroll-y" id="result"> 
+        </div>
+        <script type="text/javascript">
+        function show_queue(){
+          $.ajax({
+          dataType: "html",
+          url: "/queue",
+          success: search_result
+          });
+        }
+        function search_result(d,s,j){
+                document.getElementById("result").innerHTML=d;
+                window.setTimeout(show_queue, 3000 );
+        }
+        show_queue();
+        </script>
+    </body>
+</html>

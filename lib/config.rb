@@ -14,7 +14,11 @@ class Config
     @@config[:database_connection_string]
   end
   
+  def self.database_logger
+    @@config[:database_logger]
+  end
+  
 end
 
 DB = Sequel.connect( Config.database_connection )
-DB.loggers << Logger.new($stdout)
+DB.loggers << Logger.new(Config.database_logger)

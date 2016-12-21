@@ -23,7 +23,8 @@ class SongQueue < Sequel::Model(:queue)
     queue_item = SongQueue.order(:inserted).first
     song = nil
     if queue_item
-      song = Song[queue_item.song_id]
+      song = QueuedSong[queue_item.song_id]
+      song.requested_by = queue_item.inserted_by
       queue_item.delete
     end
     song

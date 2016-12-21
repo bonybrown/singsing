@@ -5,8 +5,14 @@ require 'song_queue'
 
 
 class WebInterface < Sinatra::Base
-  set :erb, :escape_html => true
-  set :bind, '0.0.0.0'
+  configure do
+    set :server, :thin
+    set :threaded, true
+    set :logging, false
+    set :erb, :escape_html => true
+    set :bind, '0.0.0.0'
+    set :port, 8000
+  end
 
   get '/' do
     redirect to('/index.html')

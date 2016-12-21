@@ -42,7 +42,7 @@ class VlcHandler
     @@running = true
     while( @@running ) do
       begin
-        puts "vlc: not playing, dequeue next song"
+        #puts "vlc: not playing, dequeue next song"
         next_song = SongQueue.dequeue
         if next_song
           
@@ -58,7 +58,7 @@ class VlcHandler
         end
         sleep 5
       rescue StandardError => e
-        puts "ERROR: vlc_handler -> #{e}"
+        $stderr.puts "ERROR: vlc_handler -> #{e}"
       end
     end
   end
