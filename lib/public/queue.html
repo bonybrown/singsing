@@ -17,8 +17,13 @@
           success: search_result
           });
         }
+        last_result = null
         function search_result(d,s,j){
-                document.getElementById("result").innerHTML=d;
+                target = document.getElementById("result")
+                if( last_result != d ){
+                  target.innerHTML = d;
+                  last_result = d;
+                }
                 window.setTimeout(show_queue, 3000 );
         }
         show_queue();

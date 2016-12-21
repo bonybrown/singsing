@@ -1,25 +1,10 @@
-<!--<html>
-    <head>
-        <title>Karaoke Queue</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <link href="site.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-    </head>
-    <body>
-        <div class="body row scroll-y" id="result"> -->
-        <% if queue_items.empty? %>
-        <div class="nomatch"><p>There are no songs in the queue. Go request one!</p></div>
-        <% end %>
-        <% queue_items.each do | row | %>
-            <div class="<%= row == queue_items.first ? "now-playing" : ""  %>"><%= row[:artist_name]  %>
-            <div class="requested"><%= row[:requested_by]  %></div>
-            <br/>
-            <%= row[:song_name]  %>
-            </div>
-            
-        <% end %>  
-        <!--
-        </div>
-    </body>
-</html>-->
+<% if queue_items.empty? %>
+  <div class="nomatch"><p>There are no songs in the queue. Go request one!</p></div>
+<% end %>
+<% queue_items.each_with_index do | row, index | %>
+  <div class="<%= index == 0 ? "now-playing" : ""  %>"><%= row[:artist_name]  %>
+    <div class="requested"><%= row[:requested_by]  %></div>
+    <br/>
+    <%= row[:song_name]  %>
+  </div>    
+<% end %>  
