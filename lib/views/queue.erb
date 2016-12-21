@@ -12,7 +12,7 @@
         <div class="nomatch"><p>There are no songs in the queue. Go request one!</p></div>
         <% end %>
         <% queue_items.each do | row | %>
-            <div><%= row[:artist_name]  %>
+            <div class="<%= row == queue_items.first ? "now-playing" : ""  %>"><%= row[:artist_name]  %>
             <div class="requested"><%= row[:requested_by]  %></div>
             <br/>
             <%= row[:song_name]  %>

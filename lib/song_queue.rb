@@ -19,6 +19,7 @@ class SongQueue < Sequel::Model(:queue)
                 ORDER BY inserted;}]
   end
   
+  
   def self.dequeue
     queue_item = SongQueue.order(:inserted).first
     song = nil
@@ -26,6 +27,17 @@ class SongQueue < Sequel::Model(:queue)
       song = QueuedSong[queue_item.song_id]
       song.requested_by = queue_item.inserted_by
       queue_item.delete
+    end
+    song
+  end
+    
+  
+  def self.peek
+    queue_item = SongQueue.order(:inserted).first
+    song = nil
+    if queue_item
+      song = QueuedSong[queue_item.song_id]
+      song.requested_by = queue_item.inserted_by
     end
     song
   end
