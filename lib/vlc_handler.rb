@@ -52,7 +52,7 @@ class VlcHandler
           
           @@vlc_pid = spawn('vlc','--fullscreen','--no-video-title-show','--play-and-exit',media_file)
           Process.wait(@@vlc_pid)
-          SongQueue.dequeue
+          next_song.queue_entry.dequeue
           @@vlc_pid  = 0
           FileUtils.remove_entry @@current_tempdir if @@current_tempdir
           @@current_tempdir = nil

@@ -7,8 +7,9 @@ class SongQueue < Sequel::Model(:queue)
   def self.enqueue( song, who )
     queue_item = SongQueue.create( song_id: song.id,
                                    inserted_by: who,
-                                   inserted: Time.now )    
-    SongQueue.count
+                                   inserted: Time.now,
+                                   played: false)    
+    SongQueue.where(played: false).count
   end
   
   def self.items
@@ -16,28 +17,23 @@ class SongQueue < Sequel::Model(:queue)
                  FROM songs s , artists a, queue q
                 WHERE s.artist_id = a.id
                 AND q.song_id = s.id 
+                AND q.played = false
                 ORDER BY inserted;}]
   end
   
   
-  def self.dequeue
-    queue_item = SongQueue.order(:inserted).first
-    song = nil
-    if queue_item
-      song = QueuedSong[queue_item.song_id]
-      song.requested_by = queue_item.inserted_by
-      queue_item.delete
-    end
-    song
+  def dequeue
+    self.played = true
+    self.save
   end
     
   
   def self.peek
-    queue_item = SongQueue.order(:inserted).first
+    queue_item = SongQueue.where(played: false).order(:inserted).first
     song = nil
     if queue_item
       song = QueuedSong[queue_item.song_id]
-      song.requested_by = queue_item.inserted_by
+      song.queue_entry = queue_item
     end
     song
   end

@@ -75,7 +75,8 @@ CREATE TABLE queue (
     inserted timestamp without time zone,
     song_id integer,
     inserted_by character varying(50) DEFAULT NULL::character varying,
-    id integer NOT NULL
+    id integer NOT NULL,
+    played boolean DEFAULT false
 );
 
 
@@ -219,6 +220,13 @@ CREATE INDEX idx_search_english ON search USING gin (english);
 --
 
 CREATE INDEX idx_search_simple ON search USING gin (simple);
+
+
+--
+-- Name: queue_played; Type: INDEX; Schema: public; Owner: karaoke
+--
+
+CREATE INDEX queue_played ON queue USING btree (played, inserted);
 
 
 --
