@@ -35,5 +35,5 @@ class Song < Sequel::Model
 end
 
 class QueuedSong < Song
-  attr_accessor  :queue_entry
+  attr_accessor  :queue_id
 end

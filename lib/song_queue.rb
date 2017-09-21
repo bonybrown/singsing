@@ -27,13 +27,17 @@ class SongQueue < Sequel::Model(:queue)
     self.save
   end
     
+  def self.dequeue( id )
+    item = SongQueue.where(id: id).first
+    item.dequeue unless item.nil?
+  end
   
   def self.peek
     queue_item = SongQueue.where(played: false).order(:inserted).first
     song = nil
     if queue_item
       song = QueuedSong[queue_item.song_id]
-      song.queue_entry = queue_item
+      song.queue_id = queue_item.id
     end
     song
   end

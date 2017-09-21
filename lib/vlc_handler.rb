@@ -8,8 +8,10 @@ class VlcHandler
   @@thread = nil
   @@running = false
   @@current_tempdir = nil
+  @@song_queue = nil
   
-  def self.start
+  def self.start( queue_impl )
+    @@song_queue = queue_impl
     @@thread = Thread.new{ run }
   end
   
@@ -43,7 +45,7 @@ class VlcHandler
     while( @@running ) do
       begin
         #puts "vlc: not playing, dequeue next song"
-        next_song = SongQueue.peek
+        next_song = @@song_queue.peek
         if next_song
           
           media_file = next_song.full_path 
@@ -52,7 +54,8 @@ class VlcHandler
           
           @@vlc_pid = spawn('vlc','--fullscreen','--no-video-title-show','--play-and-exit',media_file)
           Process.wait(@@vlc_pid)
-          next_song.queue_entry.dequeue
+          #next_song.queue_entry.dequeue
+          @@song_queue.dequeue( next_song.queue_id )
           @@vlc_pid  = 0
           FileUtils.remove_entry @@current_tempdir if @@current_tempdir
           @@current_tempdir = nil

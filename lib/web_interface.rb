@@ -26,6 +26,23 @@ class WebInterface < Sinatra::Base
     erb :queue, :locals => {:queue_items => SongQueue.items}
   end
   
+  get '/dequeue' do
+    id = request[:id]
+    SongQueue.dequeue( id )
+    "ok"
+  end
+  
+  get '/peek' do
+    song = SongQueue.peek
+    r = nil
+    unless song.nil?
+      r = { queue_id: song.queue_entry.id,
+            filename: song.filename
+          }
+    end
+    r.to_json
+  end
+  
   post '/queue' do
     id = request[:id]
     request_name = request[:name]
