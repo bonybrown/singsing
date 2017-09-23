@@ -18,6 +18,10 @@ class Config
     @@config[:database_logger]
   end
   
+  def self.remote_url
+    @@config[:remote_url]
+  end
+  
 end
 
 DB = Sequel.connect( Config.database_connection )

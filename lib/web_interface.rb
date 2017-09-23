@@ -34,11 +34,10 @@ class WebInterface < Sinatra::Base
   
   get '/peek' do
     song = SongQueue.peek
-    r = nil
+    r = {}
     unless song.nil?
-      r = { queue_id: song.queue_entry.id,
-            filename: song.filename
-          }
+      r[:queue_id] = song.queue_id
+      r[:filename] = song.filename
     end
     r.to_json
   end
