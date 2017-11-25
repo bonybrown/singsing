@@ -1,3 +1,9 @@
 <% search_results.each do | row | %>
-		<div class="" id="id_<%= row[:id] %>"><%= row[:artist_name]  %><br/><%= row[:song_name]  %></div>
+		<div class="" id="id_<%= row[:id].first %>">
+		<% if row[:id].count > 1 %>
+		 <% row[:id].count.times do |i| %>
+		   <a href="#" id="id_<%= row[:id][i] %>"><%= row[:sortkey][i] || '?' %></a>
+     <% end %>
+		<% end %>
+		<%= row[:artist_name]  %><br/><%= row[:song_name]  %></div>
 <% end %>

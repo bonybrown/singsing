@@ -12,6 +12,9 @@
         
         function set_selection(selected){
                 current_selection = selected;
+                if( current_selection ){
+                  console.info("Selected ID:" + current_selection.id)
+                }
                 var a = $("#playbtn");
                 if( a.length > 0 ){
                         a[0].disabled = (selected == null);
@@ -25,7 +28,12 @@
         }
         
         function select(){
-                var t= $(event.target);
+                var t= $(event.target)[0];
+                console.info(t);
+                if( t.id && t.id.match(/^id_/) ){
+                  set_selection( t )
+                }
+                t = $(t)
                 while( ! t.is("div")){
                         t= t.parent();
                 }
@@ -45,9 +53,9 @@
                         t.toggleClass("selected");
                 }
                 
-                if( t[0].id != "result"){
-                        set_selection(t[0]);
-                }
+//                 if( t[0].id != "result"){
+//                         set_selection(t[0]);
+//                 }
         }
         
         function show_queue(){
