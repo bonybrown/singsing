@@ -27,8 +27,8 @@
                 document.getElementById("result").innerHTML=d;
         }
         
-        function select(){
-                var t= $(event.target)[0];
+        function select(evt){
+                var t= evt.target;
                 console.info(t);
                 if( t.id && t.id.match(/^id_/) ){
                   set_selection( t )
@@ -145,11 +145,16 @@
                 <input class="textinput" type="search" name="q" id="q" placeholder="Search Song or Artist" />
             </form>
         </div>
-        <div class="body-with-header body row scroll-y" id="result" onclick="select()"></div>
+        <div class="body-with-header body row scroll-y" id="result"></div>
         <div class="footer row"><button disabled="disabled" id="playbtn" class="play" onclick="queue()">queue</button>
             <form action="" onsubmit="return queue();">
                 <input class="textinput" type="text" id="reqname" placeholder="Your Name"></input>
             </form>
         </div>
+        <script type="text/javascript">
+        window.onload=function(){
+        $("#result").on("click",select);
+        }
+        </script>
     </body>
 </html>
