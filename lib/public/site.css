@@ -1,14 +1,112 @@
-/* Generic pane rules */
-body { margin: 0}
-* { font-family:arial,sans-serif } 
-.row, .col { overflow: hidden; position: absolute; }
-.row { left: 0; right: 0; }
-.col { top: 0; bottom: 0; }
-.scroll-x { overflow-x: auto; }
-.scroll-y { overflow-y: auto; }
-.header.row { height: 50px; top: 0; }
-div.body-with-header{top: 50px;bottom: 50px;}
+div.page-layout{
+  display: grid;
+  height: 100%;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  grid-template-rows: 4rem auto 4rem;
+}
 
+div#result{
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.full-width{
+  width:100%;
+}
+
+li.list-group-item{
+  padding: .25rem 0.6rem;
+  min-height: 60px;
+}
+
+li div.btngrp{
+  float: right;
+  position: relative;
+  left: 9em;
+  display:none;
+}
+
+li div.opts{
+  text-align: right;
+  margin-top: 10px;
+}
+
+li div.opts button.btn{
+  margin-left: 0.5rem;
+}
+
+li div.opts button.btn:focus{
+  background-color: #e2e3e5;
+}
+
+li div.btngrp button.btn{
+  margin-left:1em;
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+}
+
+@keyframes slide {
+    0% {left: 9em;}
+    100% {left: 0em;}
+}
+li.active div.btngrp{
+  display: block;
+  left: 0em;
+  animation-name: slide;
+  animation-duration: 0.3s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease; 
+}
+
+button.whats_queued{
+  background-image: url('format-list-ordered.png');
+}
+
+li button.sing{
+  background-image: url('media-playback-start.png');
+}
+
+li button.love{
+  background-image: url('fav-add.png');
+}
+
+li button.remove{
+  background-image: url('remove.png');
+}
+
+li button.more{
+  background-image: url('audio-cd.png');
+}
+
+nav#bottom button{
+  background-repeat: no-repeat;
+  width: 50px;
+  height: 50px;
+  font-size: 0;
+  background-color: transparent;
+}
+
+button.random{
+  background-image: url('media-playlist-shuffle.png');
+}
+
+button.favourites{
+  background-image: url('favourites.png');
+}
+
+button.search{
+  background-image: url('find.png');
+  width: 48px;
+  text-indent: 200px;
+}
+
+#q {
+  height: 3em;
+}
 
 @keyframes pulsate {
     0% {background-color: #e3e3df;}
@@ -16,48 +114,23 @@ div.body-with-header{top: 50px;bottom: 50px;}
     100% {background-color: #e3e3df;}
 }
 
-.footer.row { height: 50px; bottom: 0; }
-div.body div.requested{border:none;float:right;font-size:150%;margin:0;padding:5 20 5 20px;background-color:transparent}
-div.body div{padding:1ex;border-top:1px solid #f0f0f0;border-bottom:1px solid #909090;background-color:#e3e3df}
-
-div.body div a{float:right;margin:0 0.3ex;}
-
-div.body div.selected{background-color:#9BB7BE}
-div.body div.now-playing{background-color:#e3e3df;
+div#result li.now-playing{background-color:#e3e3df;
   animation-name: pulsate;
   animation-duration: 4s;
   animation-iteration-count: infinite;
   animation-timing-function: ease; 
 }
-div.header form{margin-right:150px}
-div.footer form{margin-right:50px}
-input.textinput {font-size:32px;height:100%}
-.footer.row {font-size:32px}
-span.actions{display:inline;float:right;margin-top: -0.5ex; margin-right: 1ex;}
-#q{width:100%}
-#reqname{width:100%}
-button.whats_queued{background-image: url('format-list-ordered.png');}
-button.play{background-image: url('media-playback-start.png');}
-button.random{background-image: url('media-playlist-shuffle.png');}
-button.search{background-image: url('find.png');}
-button:disabled{opacity:0.2}
-button{
-  width: 48px;
-  height: 48px;
-  padding: 0;
-  margin: 0;
-  border: 0px none;
-  background-color: transparent; 
-  text-indent: 200px;
-}
-div.header button{float:right}
-div.footer button{float:right}
 
-div.body div.nomatch {
+div#result div.nomatch {
   background-color: #e3e3df;
   background-image: url("not-found.png");
   background-repeat: no-repeat;
   text-align: center;
   padding: 180px 1ex 1ex 1ex;
   background-position-x: center;
+}
+
+li .requested{
+  float: right;
+  font-weight: bold;
 }

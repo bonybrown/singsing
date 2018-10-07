@@ -1,10 +1,16 @@
 <% if queue_items.empty? %>
-  <div class="nomatch"><p>There are no songs in the queue. Go request one!</p></div>
+<div class="nomatch"><p>There are no songs in the queue. Go request one!</p></div>
+<% end %>
+<% if ! queue_items.empty? %>
+<ul class="list-group">
 <% end %>
 <% queue_items.each_with_index do | row, index | %>
-  <div class="<%= index == 0 ? "now-playing" : ""  %>"><%= row[:artist_name]  %>
-    <div class="requested"><%= row[:requested_by]  %></div>
-    <br/>
-    <%= row[:song_name]  %>
-  </div>    
+<li  class="list-group-item <%= index == 0 ? "now-playing" : ""  %>"><%= row[:artist_name]  %>
+<div class="requested"><%= row[:requested_by]  %></div>
+<br/>
+<%= row[:song_name]  %>
+</li>    
 <% end %>  
+<% if ! queue_items.empty? %>
+</ul>
+<% end %>

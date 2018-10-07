@@ -16,6 +16,16 @@ class Song < Sequel::Model
     self.filename.match( /\.ZIP$/i )
   end
   
+  def self.by_ids( id_list )
+    Song.db[%q{SELECT array_agg(s.id) as id, array_agg(s.sortkey) as sortkey, a.name AS artist_name, s.name AS song_name
+            FROM songs s , artists a
+           WHERE s.artist_id = a.id
+           AND s.id IN :ids
+           GROUP BY a.name, s.name
+           ORDER BY a.name, s.name;},
+            ids: id_list]
+  end
+  
   def self.query( search_term )
     Song.db[%q{SELECT array_agg(s.id) as id, array_agg(s.sortkey) as sortkey, a.name AS artist_name, s.name AS song_name,
                  avg( ts_rank_cd(english, plainto_tsquery('english',:query)) + ts_rank_cd(simple, plainto_tsquery('simple',:query)) ) AS rank

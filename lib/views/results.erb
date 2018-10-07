@@ -1,9 +1,25 @@
+<ul class="list-group">
 <% search_results.each do | row | %>
-		<div class="" id="id_<%= row[:id].first %>">
-		<% if row[:id].count > 1 %>
-		 <% row[:id].count.times do |i| %>
-		   <a href="#" id="id_<%= row[:id][i] %>"><%= row[:sortkey][i] || '?' %></a>
-     <% end %>
-		<% end %>
-		<%= row[:artist_name]  %><br/><%= row[:song_name]  %></div>
+<li class="list-group-item" id="id_<%= row[:id].first %>">
+<div class="btngrp">
+<% if row[:id].count > 1 %>
+<button class="btn more" data-toggle="collapse" data-target="#more_<%= row[:id].first %>"></button>
+<% end %>  
+<% if mode == :favourites %>
+<button class="btn remove"></button>
+<% else %>
+<button class="btn love"></button>
 <% end %>
+<button class="btn sing"></button>
+</div>
+<%= row[:artist_name]  %><br/><%= row[:song_name]  %>
+<% if row[:id].count > 1 %>
+<div class="collapse opts" id="more_<%= row[:id].first %>">
+<% row[:id].count.times do |i| %>
+<button class="btn btn-secondary btn-sm" id="id_<%= row[:id][i] %>"><%= row[:sortkey][i] || '?' %></button>
+<% end %>
+</div>
+<% end %>
+</li>
+<% end %>
+</ul>

@@ -19,11 +19,11 @@ class WebInterface < Sinatra::Base
   end
   
   get '/random' do
-    erb :results, :locals => {:search_results => Song.random}
+    (erb :results, :locals => {:search_results => Song.random, :mode => :random}).gsub("\n","")
   end
 
   get '/queue' do
-    erb :queue, :locals => {:queue_items => SongQueue.items}
+    (erb :queue, :locals => {:queue_items => SongQueue.items}).gsub("\n","")
   end
   
   get '/dequeue' do
@@ -63,7 +63,22 @@ class WebInterface < Sinatra::Base
     if search_results.empty? 
       erb :nomatch, :locals => {:search_term => search_term}
     else
-      erb :results, :locals => {:search_results => search_results}
+      (erb :results, :locals => {:search_results => search_results, :mode => :search}).gsub("\n","")
+    end
+  end
+  
+  get '/favourites' do
+    #comma separated ids is parameter 'ids'
+    list = request[:ids]
+    puts "Favourites list #{list}"
+    search_results = []
+    if list
+      search_results = ::Song.by_ids(list.split(','))
+    end
+    if search_results.empty? 
+      erb :nofavourites, :locals => {:search_term => "nothing"}
+    else
+      (erb :results, :locals => {:search_results => search_results, :mode => :favourites}).gsub("\n","")
     end
   end
 end

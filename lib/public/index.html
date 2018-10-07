@@ -1,160 +1,232 @@
-<html>
-    <head>
-        <title>Karaoke</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-        <meta name="apple-mobile-web-app-capable" content="yes" />
-        <link href="site.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="jquery-1.10.2.min.js"></script>
-    </head>
-    <body>
-        <script type="text/javascript">
-        var current_selection = null;
-        
-        function set_selection(selected){
-                current_selection = selected;
-                if( current_selection ){
-                  console.info("Selected ID:" + current_selection.id)
-                }
-                var a = $("#playbtn");
-                if( a.length > 0 ){
-                        a[0].disabled = (selected == null);
-                }
-                
-        }
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" >
+    <link href="site.css" rel="stylesheet" type="text/css" />
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="js/bootstrap.bundle.min.js"></script>
+    <title>Karaoke - rebootstrap</title>
+  </head>
+  <body>
+  <script type="text/javascript">
+  var current_selection = null;
+  var current_selection_id = null;
+  const apiBase = window.location.port === "8000" ? "/" : "/api"
+  const servicesBase = window.location.protocol + "//" + window.location.host.replace("www.","services.") + apiBase;
+  
+  function set_selected_id( selected ){
+    current_selection_id = selected.prop("id").substr(3);
+    console.info("Selected ID:" + current_selection_id);
+  }
+  
+  function set_selection(selected){
+    if(current_selection){
+      current_selection.toggleClass("active");
+    }
+    current_selection = selected;
+    if( current_selection ){
+      current_selection.toggleClass("active");
+      
+    }
+  }
 
-        
-        function search_result(d,s,j){
-                document.getElementById("result").innerHTML=d;
+  
+  function search_result(d,s,j){
+    document.getElementById("result").innerHTML=d;
+  }
+  
+  function fav_add(id){
+    var id_list = []
+    var list = window.localStorage.getItem("favs")
+    if( list ){
+      id_list = list.split(",");
+    }
+    if( ! id_list.includes(id) ){
+        id_list.push(id);
+    }
+    window.localStorage.setItem("favs", id_list.join(","));
+  }
+  function fav_remove(id){
+    var id_list = []
+    var list = window.localStorage.getItem("favs")
+    if( list ){
+      id_list = list.split(",");
+    }
+    if( id_list.includes(id) ){
+      id_list.splice( id_list.indexOf(id), 1 );
+    }
+    window.localStorage.setItem("favs", id_list.join(","));
+  }
+  
+  function select(evt){
+    var t = evt.target;
+    console.info(t);
+    t=$(t);
+    var action = "select"
+    while( true ){
+      if( t.prop("id") && t.prop("id").match(/^id_/) ){
+        if( action === "select"){
+          set_selected_id(t);
+          action = "done";
         }
-        
-        function select(evt){
-                var t= evt.target;
-                console.info(t);
-                if( t.id && t.id.match(/^id_/) ){
-                  set_selection( t )
-                }
-                t = $(t)
-                while( ! t.is("div")){
-                        t= t.parent();
-                }
-                if(t.hasClass("nomatch")){
-                        return;
-                }
-                if(t[0].id == null || t[0].id == ""){
-                  return;
-                }
-                var d = $("div.selected");
-                if( d.length != 0 ){
-                        //var a = $("div.selected span.actions");
-                        d.toggleClass("selected");
-                        //a.fadeOut({queue:true,duration:400});
-                }
-                if( t.id!="result"){
-                        t.toggleClass("selected");
-                }
-                
-//                 if( t[0].id != "result"){
-//                         set_selection(t[0]);
-//                 }
+        if( action === "remove"){
+          t.remove();
+          break;
         }
-        
-        function show_queue(){
-          $.ajax({
-          dataType: "html",
-          url: "/queue",
-          success: search_result
-          });
-        }
-        
+      }
+      if( t.is("li.list-group-item") ){
+        set_selection(t);
+      }
+      if( t.is("div#result") ){
+        break;
+      }
+      if( t.is("button.sing")){
+        $('#singModal').modal({})
+        break;
+      }
+      if( t.is("button.love")){
+        fav_add(current_selection_id);
+        break;
+      }
+      if( t.is("button.remove")){
+        fav_remove(current_selection_id);
+        action="remove";
+      }
+      t=t.parent();
+    }
+  }
+  
+  function show_queue(){
+    $.ajax({
+      dataType: "html",
+      url: servicesBase+"/queue",
+      success: search_result
+    });
+  }
+  
+  function favs(){
+    $.ajax({
+      dataType: "html",
+      url: servicesBase+"/favourites",
+      data: {ids: window.localStorage.getItem("favs")},
+      success: search_result
+    });
+  }
 
-        
-        function search(){
-                set_selection(null);
-                var q=document.getElementById("q").value;
-                if( q){
-                        $.ajax({
-                        dataType: "html",
-                        url: "/search",
-                        data: {q:q},
-                        success: search_result
-                        });
-                }
-                return false;
-        }
+  function search(){
+    set_selection(null);
+    var q=document.getElementById("q").value;
+    if( q){
+      $.ajax({
+        dataType: "html",
+        url: servicesBase+"/search",
+        data: {q:q},
+        success: search_result
+      });
+    }
+    return false;
+  }
 
-        function random(){
-                set_selection(null);
-                $.ajax({
-                        dataType: "html",
-                        url: "/random",
-                        success: search_result
-                        });
-                
-                return false;
-        }
+  function random(){
+    set_selection(null);
+    $.ajax({
+      dataType: "html",
+      url: servicesBase+"/random",
+      success: search_result
+    });
+    
+    return false;
+  }
 
-        function queue_result(d,s,j){
-                if(d.result){
-                        var ord = "th";
-                        var mod = d.position % 10;
-                        if( mod == 1 && d.position != 11 ){
-                                ord = "st";
-                        }
-                        if( mod == 2 && d.position != 12 ){
-                                ord = "nd";
-                        }
-                        if( mod == 3 && d.position != 13 ){
-                                ord = "rd";
-                        }
-                        alert("Your song is " + d.position + ord + " in the queue.");
-                }
-        }
-        
-        function queue(){
-                if( current_selection ){
-                        
-                        var name=$("#reqname")[0].value.trim();
-                        if(!name){
-                                alert("Don't be shy, put your name in to request a song!");
-                        }
-                        else{
-                                var id = current_selection.id.substr(3);
-                                $.ajax({
-                                dataType: "json",
-                                method: "post",
-                                url: "/queue",
-                                data: {id:id,name:name},
-                                success: queue_result
-                                });
-                        }
-                }
-                else{
-                        alert("Search for a song or roll the dice, then pick a song first");
-                        
-                }
-                return false;
-        }
-        
-        </script>
-            
-        <div class="header row">
-            <button class="whats_queued" onclick="show_queue()">queued</button>
-            <button class="random" onclick="random()">random</button>
-            <button class="search" onclick="search()">search</button>
-            <form action="" onsubmit="return search();">
-                <input class="textinput" type="search" name="q" id="q" placeholder="Search Song or Artist" />
-            </form>
+  function queue_result(d,s,j){
+    if(d.result){
+      var ord = "th";
+      var mod = d.position % 10;
+      if( mod == 1 && d.position != 11 ){
+        ord = "st";
+      }
+      if( mod == 2 && d.position != 12 ){
+        ord = "nd";
+      }
+      if( mod == 3 && d.position != 13 ){
+        ord = "rd";
+      }
+      alert("Your song is " + d.position + ord + " in the queue.");
+    }
+  }
+  
+  function queue(){
+    if( current_selection ){
+      var name=$("#reqname")[0].value.trim();
+      if(!name){
+        alert("Don't be shy, put your name in to request a song!");
+      }
+      else{
+        $.ajax({
+          dataType: "json",
+          method: "post",
+          url: servicesBase+"/queue",
+          data: {id:current_selection_id,name:name},
+          success: queue_result
+        });
+        $('#singModal').modal('hide');
+      }
+    }
+    else{
+      alert("Search for a song or roll the dice, then pick a song first");
+    }
+    return false;
+  }
+  
+  </script>
+  <div class="page-layout">
+    <nav class="navbar navbar-light bg-light">
+      <form class="form my-lg-0 search-form full-width" action="" onsubmit="return search();">
+        <div class="input-group">
+          <input type="search" class="form-control" name="q" id="q" placeholder="Search Song or Artist" aria-label="Search Song or Artist" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary search" onclick="search()" type="button" id="button-addon2">Search</button>
+          </div>
         </div>
-        <div class="body-with-header body row scroll-y" id="result"></div>
-        <div class="footer row"><button disabled="disabled" id="playbtn" class="play" onclick="queue()">queue</button>
-            <form action="" onsubmit="return queue();">
-                <input class="textinput" type="text" id="reqname" placeholder="Your Name"></input>
-            </form>
+      </form>
+    </nav>  
+    <div id="result"></div>
+    <nav class="navbar navbar-light bg-light" id="bottom">
+      <button class="btn whats_queued" onclick="show_queue()">queued</button>
+      <button class="btn random" onclick="random()">random</button>
+      <button class="btn favourites" onclick="favs()">favourites</button>
+    </nav>  
+  </div>
+  <div class="modal fade" tabindex="-1" role="dialog" id="singModal">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Request Song</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
         </div>
-        <script type="text/javascript">
-        window.onload=function(){
-        $("#result").on("click",select);
-        }
-        </script>
-    </body>
+        <div class="modal-body">
+          <form action="" onsubmit="return queue();">
+            <div class="input-group">
+              <input type="text" class="form-control" name="reqname" id="reqname" placeholder="Enter your name" aria-label="Enter your name" aria-describedby="button-sing-submit">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary sing-submit" onclick="queue()" type="button" id="button-sing-submit">OK</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="text/javascript">
+    window.onload=function(){
+    $("#result").on("click",select);
+  }
+  </script>
+  </body>
 </html>
