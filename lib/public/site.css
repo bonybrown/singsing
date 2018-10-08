@@ -5,12 +5,14 @@ div.page-layout{
   position: fixed;
   top: 0;
   width: 100%;
-  grid-template-rows: 4rem auto 4rem;
+  overflow: hidden;
+  grid-template-rows: 4rem minmax(1px, 1fr) 4rem;
 }
 
 div#result{
-  overflow-y: auto;
+  overflow-y: scroll;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
 .full-width{
@@ -20,13 +22,6 @@ div#result{
 li.list-group-item{
   padding: .25rem 0.6rem;
   min-height: 60px;
-}
-
-li div.btngrp{
-  float: right;
-  position: relative;
-  left: 9em;
-  display:none;
 }
 
 li div.opts{
@@ -49,17 +44,25 @@ li div.btngrp button.btn{
   background-color: transparent;
 }
 
-@keyframes slide {
-    0% {left: 9em;}
-    100% {left: 0em;}
+li div.btngrp{
+  float: right;
+  position: relative;
+  left: 9em;
+  display: none;
 }
+
+@keyframes slide {
+  0% {left: 9em;}
+  100% {left: 0em;}
+}
+
 li.active div.btngrp{
   display: block;
   left: 0em;
   animation-name: slide;
   animation-duration: 0.3s;
   animation-iteration-count: 1;
-  animation-timing-function: ease; 
+  animation-timing-function: ease;
 }
 
 button.whats_queued{
@@ -109,9 +112,9 @@ button.search{
 }
 
 @keyframes pulsate {
-    0% {background-color: #e3e3df;}
-    50% {background-color: #9BB7BE;}
-    100% {background-color: #e3e3df;}
+  0% {background-color: #e3e3df;}
+  50% {background-color: #9BB7BE;}
+  100% {background-color: #e3e3df;}
 }
 
 div#result li.now-playing{background-color:#e3e3df;

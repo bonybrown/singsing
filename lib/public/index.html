@@ -35,7 +35,8 @@
 
   
   function search_result(d,s,j){
-    document.getElementById("result").innerHTML=d;
+    $("#result").scrollTop(0);
+    $("#result").html(d);
   }
   
   function fav_add(id){
@@ -137,7 +138,6 @@
       url: servicesBase+"/random",
       success: search_result
     });
-    
     return false;
   }
 
@@ -182,24 +182,6 @@
   }
   
   </script>
-  <div class="page-layout">
-    <nav class="navbar navbar-light bg-light">
-      <form class="form my-lg-0 search-form full-width" action="" onsubmit="return search();">
-        <div class="input-group">
-          <input type="search" class="form-control" name="q" id="q" placeholder="Search Song or Artist" aria-label="Search Song or Artist" aria-describedby="button-addon2">
-          <div class="input-group-append">
-            <button class="btn btn-outline-secondary search" onclick="search()" type="button" id="button-addon2">Search</button>
-          </div>
-        </div>
-      </form>
-    </nav>  
-    <div id="result"></div>
-    <nav class="navbar navbar-light bg-light" id="bottom">
-      <button class="btn whats_queued" onclick="show_queue()">queued</button>
-      <button class="btn random" onclick="random()">random</button>
-      <button class="btn favourites" onclick="favs()">favourites</button>
-    </nav>  
-  </div>
   <div class="modal fade" tabindex="-1" role="dialog" id="singModal">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -221,6 +203,25 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div class="page-layout">
+    <nav class="navbar navbar-light bg-light">
+      <form class="form my-lg-0 search-form full-width" action="" onsubmit="return search();">
+        <div class="input-group">
+          <input type="search" class="form-control" name="q" id="q" placeholder="Search Song or Artist" aria-label="Search Song or Artist" aria-describedby="button-addon2">
+          <div class="input-group-append">
+            <button class="btn btn-outline-secondary search" onclick="search()" type="button" id="button-addon2">Search</button>
+          </div>
+        </div>
+      </form>
+    </nav>
+    <div id="result"></div>
+    <nav class="navbar navbar-light bg-light" id="bottom">
+      <button class="btn whats_queued" onclick="show_queue()">queued</button>
+      <button class="btn random" onclick="random()">random</button>
+      <button class="btn favourites" onclick="favs()">favourites</button>
+    </nav>
   </div>
 
   <script type="text/javascript">
